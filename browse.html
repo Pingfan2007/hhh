@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse | Butylphthalide &amp; Cyclosporine Knowledge Base</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header small">
+    <div class="header-inner">
+      <a class="brand-link" href="index.html">
+        <h1>Butylphthalide &amp; Cyclosporine Knowledge Base</h1>
+      </a>
+    </div>
+  </header>
+
+  <main class="browse-main">
+    <!-- 左侧联动筛选 -->
+    <aside class="filter-panel">
+      <h2>Filters</h2>
+
+      <div class="filter-group">
+        <label>1. Drug Category</label>
+        <select id="filterCategory">
+          <option value="">-- 请选择分类 --</option>
+          <option value="Chemical Drug">化学药 (Chemical Drug)</option>
+          <option value="Natural Drug">天然药 (Natural Drug) — 暂无数据</option>
+          <option value="Biological product">生物制品 (Biological product)</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>2. Drug Name</label>
+        <select id="filterDrug" disabled>
+          <option value="">-- 请先选择分类 --</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>3. Data Dimension</label>
+        <select id="filterDimension" disabled>
+          <option value="">-- 请先选择药物 --</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>4. Field</label>
+        <select id="filterField" disabled>
+          <option value="">-- 请先选择维度 --</option>
+        </select>
+      </div>
+
+      <button id="resetFilter" class="reset-btn">Reset</button>
+    </aside>
+
+    <!-- 右侧结果 -->
+    <section class="result-panel">
+      <div class="result-header">
+        <h2 id="resultTitle">Results</h2>
+        <span id="resultCount"></span>
+      </div>
+      <div id="resultList" class="result-list">
+        <p class="empty-tip">请从左侧依次选择筛选条件。</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/filter.js"></script>
+  <script src="js/render.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      initBrowsePage();
+      // 支持首页搜索跳转
+      const params = new URLSearchParams(location.search);
+      const q = params.get('q');
+      if (q) {
+        document.getElementById('globalSearch') && (document.getElementById('globalSearch').value = q);
+        quickSearch(q);
+      }
+    });
+  </script>
+</body>
+</html>

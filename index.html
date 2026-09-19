@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Butylphthalide & Cyclosporine Knowledge Base</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-mark">石药集团 · 河北医科大学</span>
+        <h1>Butylphthalide &amp; Cyclosporine Knowledge Base</h1>
+        <p class="subtitle">A Multi-source Data Foundation for Drug R&amp;D and Industrialization</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="home-main">
+    <!-- 搜索栏 -->
+    <section class="search-hero">
+      <h2>Search for Drugs/Products/Diseases/Targets</h2>
+      <div class="search-bar">
+        <input id="globalSearch" type="text" placeholder="Please enter your search here">
+        <button onclick="globalSearchHandler()">Advanced Search</button>
+      </div>
+      <p class="search-hint">Examples: Butylphthalide; Cerebral ischaemic stroke…</p>
+    </section>
+
+    <!-- 统计 + 知识图谱 -->
+    <section class="viz-section">
+      <div class="stat-row">
+        <div class="stat-card">
+          <h3>Statistics</h3>
+          <div class="bar-chart" id="statChartLeft"></div>
+        </div>
+        <div class="stat-card">
+          <h3>Statistics</h3>
+          <div class="bar-chart" id="statChartRight"></div>
+        </div>
+      </div>
+
+      <div class="graph-placeholder">
+        <div class="graph-center"></div>
+        <div class="graph-node n1"></div>
+        <div class="graph-node n2"></div>
+        <div class="graph-node n3"></div>
+        <div class="graph-node n4"></div>
+        <div class="graph-node n5"></div>
+        <div class="graph-node n6"></div>
+      </div>
+    </section>
+
+    <!-- 三个入口卡片 -->
+    <section class="entry-cards">
+      <a class="entry-card" href="browse.html">
+        <h3>Data Template</h3>
+        <p>标准化数据模板与字段映射</p>
+      </a>
+      <a class="entry-card" href="browse.html">
+        <h3>Knowledge Graph</h3>
+        <p>基于 NLP 的多源知识图谱</p>
+      </a>
+      <a class="entry-card" href="browse.html">
+        <h3>Modeling Tools</h3>
+        <p>药物研发建模与分析工具</p>
+      </a>
+    </section>
+
+    <div class="footer-links">
+      <a href="browse.html">API/Download</a>
+      <a href="#">Feedback</a>
+    </div>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/render.js"></script>
+  <script>
+    // 首页统计图与搜索
+    document.addEventListener('DOMContentLoaded', () => {
+      renderHomeStats();
+      document.getElementById('globalSearch').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') globalSearchHandler();
+      });
+    });
+
+    function globalSearchHandler() {
+      const kw = document.getElementById('globalSearch').value.trim();
+      if (!kw) return;
+      location.href = `browse.html?q=${encodeURIComponent(kw)}`;
+    }
+  </script>
+</body>
+</html>
