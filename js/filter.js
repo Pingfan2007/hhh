@@ -9,7 +9,6 @@ const DIMENSIONS = [
   { key: 'extension',   label: '拓展 (Extension)' }
 ];
 
-// 各维度可查询字段（用于第4级下拉）
 const FIELDS = {
   drug: ['Synonyms','Source','IUPAC name','InChI','InChIKey','SMILES','PubChem CID','CAS',
          'ChEBI ID','ChEMBL ID','DrugBank ID','Molecular Formula','Molecular weight',
@@ -37,23 +36,20 @@ const FIELDS = {
               'Experimental methods','Application','mechanism']
 };
 
-// 分类选项（预留天然药）
-const CATEGORIES = [
-  { value: 'Chemical Drug',     label: '化学药 (Chemical Drug)' },
-  { value: 'Natural Drug',      label: '天然药 (Natural Drug) — 暂无数据' },
-  { value: 'Biological product',label: '生物制品 (Biological product)' }
-];
-
-// 初始化浏览页
+// 初始化浏览页：先加载数据，再绑定 UI
 async function initBrowsePage() {
-  if (!window.DB || Object.keys(window.DB).length === 0) {
-    await window.loadAllData();
-  }
+  // 强制等待数据加载完成
+  await window.loadAllData();
+  console.log('数据加载完成：', {
+    drugs: DB.drugs.length,
+    products: DB.products.length,
+    diseases: DB.diseases.length,
+    targets: DB.targets.length
+  });
   bindCategorySelect();
   bindReset();
 }
 
-// 1. 分类选择
 function bindCategorySelect() {
   const catSel = document.getElementById('filterCategory');
   const drugSel = document.getElementById('filterDrug');
@@ -75,8 +71,9 @@ function bindCategorySelect() {
       return;
     }
 
-    // 按分类筛选药物
     const drugsInCat = getDrugsByCategory(cat);
+    console.log('分类', cat, '下找到药物：', drugsInCat);
+
     drugSel.disabled = drugsInCat.length === 0;
     if (drugsInCat.length === 0) {
       drugSel.innerHTML = '<option value="">该分类下暂无数据</option>';
@@ -91,7 +88,6 @@ function bindCategorySelect() {
     });
   };
 
-  // 2. 药物选择
   drugSel.onchange = () => {
     const drugId = drugSel.value;
     dimSel.innerHTML = '<option value="">-- 请选择维度 --</option>';
@@ -112,7 +108,6 @@ function bindCategorySelect() {
     });
   };
 
-  // 3. 维度选择
   dimSel.onchange = () => {
     const dim = dimSel.value;
     fieldSel.innerHTML = '<option value="">-- 请选择字段 --</option>';
@@ -130,7 +125,6 @@ function bindCategorySelect() {
     });
   };
 
-  // 4. 字段选择 → 渲染结果
   fieldSel.onchange = () => {
     const drugId = drugSel.value;
     const dim = dimSel.value;
@@ -143,19 +137,18 @@ function bindCategorySelect() {
   };
 }
 
-// 根据分类获取药物
+// 关键：从 products 里找 drug_id，再从 drugs 里取药物信息
 function getDrugsByCategory(cat) {
-  if (!window.DB || !window.DB.drugs) return [];
-  // 通过 Product 表 category 关联
+  if (!window.DB || !window.DB.products || !window.DB.drugs) return [];
+  const catLower = cat.toLowerCase();
   const productDrugIds = new Set(
     window.DB.products
-      .filter(p => (p.category || '').toLowerCase() === cat.toLowerCase())
-      .map(p => p.drug_id)
+      .filter(p => (p.category || '').toLowerCase() === catLower)
+      .map(p => String(p.drug_id))
   );
-  return window.DB.drugs.filter(d => productDrugIds.has(d.drug_id));
+  return window.DB.drugs.filter(d => productDrugIds.has(String(d.drug_id)));
 }
 
-// 重置
 function bindReset() {
   const btn = document.getElementById('resetFilter');
   if (!btn) return;
@@ -171,19 +164,16 @@ function bindReset() {
   };
 }
 
-// 首页快捷搜索
 function quickSearch(kw) {
+  if (!window.DB || !window.DB.drugs) return;
   const lower = kw.toLowerCase();
-  // 尝试匹配药物名
   const drug = window.DB.drugs.find(d =>
     (d.drug_name || '').toLowerCase().includes(lower)
   );
   if (drug) {
-    // 直接跳到浏览页并选中
     setTimeout(() => {
       const catSel = document.getElementById('filterCategory');
-      // 找到该药物所属分类
-      const prod = window.DB.products.find(p => p.drug_id === drug.drug_id);
+      const prod = window.DB.products.find(p => String(p.drug_id) === String(drug.drug_id));
       if (prod && prod.category) {
         catSel.value = prod.category;
         catSel.dispatchEvent(new Event('change'));
