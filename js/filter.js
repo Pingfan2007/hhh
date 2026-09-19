@@ -137,18 +137,25 @@ function bindCategorySelect() {
   };
 }
 
-// 关键：从 products 里找 drug_id，再从 drugs 里取药物信息
+// 把 "1.0"、"1"、"0001" 都统一成 "1"
+function normalizeId(id) {
+  if (id === null || id === undefined) return '';
+  let s = String(id).trim();
+  if (s.endsWith('.0')) s = s.slice(0, -2);
+  return String(Number(s));
+}
+
+// 根据分类获取药物
 function getDrugsByCategory(cat) {
   if (!window.DB || !window.DB.products || !window.DB.drugs) return [];
   const catLower = cat.toLowerCase();
   const productDrugIds = new Set(
     window.DB.products
       .filter(p => (p.category || '').toLowerCase() === catLower)
-      .map(p => String(p.drug_id))
+      .map(p => normalizeId(p.drug_id))
   );
-  return window.DB.drugs.filter(d => productDrugIds.has(String(d.drug_id)));
+  return window.DB.drugs.filter(d => productDrugIds.has(normalizeId(d.drug_id)));
 }
-
 function bindReset() {
   const btn = document.getElementById('resetFilter');
   if (!btn) return;
