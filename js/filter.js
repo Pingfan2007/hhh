@@ -186,6 +186,5 @@ function quickSearch(kw) {
     }, 100);
   }
 }
-
 window.initBrowsePage = initBrowsePage;
 window.quickSearch = quickSearch;
