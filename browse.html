@@ -69,17 +69,23 @@
   <script src="js/data.js"></script>
   <script src="js/filter.js"></script>
   <script src="js/render.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      initBrowsePage();
-      // 支持首页搜索跳转
-      const params = new URLSearchParams(location.search);
-      const q = params.get('q');
-      if (q) {
-        document.getElementById('globalSearch') && (document.getElementById('globalSearch').value = q);
-        quickSearch(q);
-      }
-    });
-  </script>
+ <script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    try {
+      await initBrowsePage();
+      console.log('初始化完成，数据条数：', {
+        drugs: DB.drugs.length,
+        products: DB.products.length
+      });
+    } catch (e) {
+      console.error('初始化失败：', e);
+    }
+    const params = new URLSearchParams(location.search);
+    const q = params.get('q');
+    if (q) {
+      quickSearch(q);
+    }
+  });
+</script>
 </body>
 </html>
