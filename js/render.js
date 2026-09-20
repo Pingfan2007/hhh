@@ -1,59 +1,71 @@
-// 首页统计图
-function renderHomeStats() {
-  const left = document.getElementById('statChartLeft');
-  const right = document.getElementById('statChartRight');
-  if (!left || !right) return;
-
-  const leftData = [60, 35, 55, 45];
-  const rightData = [70, 40, 65, 50];
-
-  left.innerHTML = leftData.map(h => `<div class="bar" style="height:${h}%"></div>`).join('');
-  right.innerHTML = rightData.map(h => `<div class="bar" style="height:${h}%"></div>`).join('');
+// 把 "1.0"、"1"、"0001" 都统一成 "1"
+function normalizeId(id) {
+  if (id === null || id === undefined) return '';
+  let s = String(id).trim();
+  if (s.endsWith('.0')) s = s.slice(0, -2);
+  return String(Number(s));
 }
 
-// 清空结果
-function clearResults() {
-  document.getElementById('resultList').innerHTML =
-    '<p class="empty-tip">请从左侧依次选择筛选条件。</p>';
-  document.getElementById('resultCount').textContent = '';
-  document.getElementById('resultTitle').textContent = 'Results';
-}
-
-// 渲染结果
 function renderResults(drugId, dim, field) {
   const listEl = document.getElementById('resultList');
   const countEl = document.getElementById('resultCount');
   const titleEl = document.getElementById('resultTitle');
 
-  const drug = window.DB.drugs.find(d => d.drug_id === drugId);
+  const drug = window.DB.drugs.find(d => normalizeId(d.drug_id) === normalizeId(drugId));
   const drugName = drug ? drug.drug_name : drugId;
   titleEl.textContent = `${drugName} — ${field}`;
 
   let rows = [];
 
   if (dim === 'drug') {
-    rows = window.DB.drugs.filter(d => d.drug_id === drugId)
+    // 药物本质：直接从 drugs.json 取
+    rows = window.DB.drugs
+      .filter(d => normalizeId(d.drug_id) === normalizeId(drugId))
       .map(d => ({ title: field, value: d[field] }));
+
   } else if (dim === 'product') {
+    // 处方与制剂：从 products.json 取，按 drug_id 匹配
     rows = window.DB.products
-      .filter(p => p.drug_id === drugId)
-      .map(p => ({ title: p.Product_name || p.Product_id, value: p[field] }));
+      .filter(p => normalizeId(p.drug_id) === normalizeId(drugId))
+      .map(p => ({
+        title: `${p.Product_name || p.Product_id} — ${field}`,
+        value: p[field]
+      }));
+
   } else if (dim === 'disease') {
+    // 适应证：从 diseases.json 取
     rows = window.DB.diseases
-      .filter(d => d.drug_id === drugId)
-      .map(d => ({ title: d.disease_name, value: d[field] }));
+      .filter(d => normalizeId(d.drug_id) === normalizeId(drugId))
+      .map(d => ({
+        title: `${d.disease_name || d.disease_id} — ${field}`,
+        value: d[field]
+      }));
+
   } else if (dim === 'target') {
+    // 靶点与机制：从 targets.json 取
     rows = window.DB.targets
-      .filter(t => t.drug_id === drugId || true)
-      .map(t => ({ title: t.target_name, value: t[field] }));
+      .map(t => ({
+        title: `${t.target_name || ''} — ${field}`,
+        value: t[field]
+      }));
+
   } else if (dim === 'pk') {
+    // 体内暴露：从 pk.json 取
     rows = window.DB.pk
-      .filter(p => p.drug_id === drugId)
-      .map(p => ({ title: `${p['Description Title 1']} / ${p['Description Title 2']}`, value: p[field] }));
+      .filter(p => normalizeId(p.drug_id) === normalizeId(drugId))
+      .map(p => ({
+        title: `${p['Description Title 1'] || ''} / ${p['Description Title 2'] || ''} — ${field}`,
+        value: p[field]
+      }));
+
   } else if (dim === 'extension') {
+    // 拓展：从 extension.json 取
     rows = window.DB.extension
-      .filter(e => e.drug_id === drugId)
-      .map(e => ({ title: e['The newly developed product'], value: e[field] }));
+      .filter(e => normalizeId(e.drug_id) === normalizeId(drugId))
+      .map(e => ({
+        title: `${e['The newly developed product'] || ''} — ${field}`,
+        value: e[field]
+      }));
   }
 
   // 过滤空值
@@ -82,6 +94,4 @@ function escapeHtml(str) {
     .replace(/"/g, '&quot;');
 }
 
-window.renderHomeStats = renderHomeStats;
 window.renderResults = renderResults;
-window.clearResults = clearResults;
