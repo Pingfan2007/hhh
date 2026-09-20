@@ -110,12 +110,22 @@ function bindCategorySelect() {
 
   dimSel.onchange = () => {
     const dim = dimSel.value;
-    fieldSel.innerHTML = '<option value="">-- 请选择字段 --</option>';
+    // 字段下拉框不再需要，直接隐藏或禁用
+    fieldSel.innerHTML = '<option value="">-- 无需选择 --</option>';
+    fieldSel.disabled = true;
+
     if (!dim) {
-      fieldSel.disabled = true;
       clearResults();
       return;
     }
+    const drugId = drugSel.value;
+    if (!drugId) {
+      clearResults();
+      return;
+    }
+    // 直接渲染该维度下所有字段
+    renderResults(drugId, dim, null);
+  };
     fieldSel.disabled = false;
     (FIELDS[dim] || []).forEach(f => {
       const opt = document.createElement('option');
