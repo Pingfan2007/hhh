@@ -135,17 +135,6 @@ function bindCategorySelect() {
     });
   };
 
-  fieldSel.onchange = () => {
-    const drugId = drugSel.value;
-    const dim = dimSel.value;
-    const field = fieldSel.value;
-    if (!drugId || !dim || !field) {
-      clearResults();
-      return;
-    }
-    renderResults(drugId, dim, field);
-  };
-}
 
 // 把 "1.0"、"1"、"0001" 都统一成 "1"
 function normalizeId(id) {
