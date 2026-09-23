@@ -54,7 +54,7 @@ function bindCategorySelect() {
 
     if (!cat) {
       drugSel.disabled = true;
-      drugSel.innerHTML = '<option value="">-- 请先选择分类 --</option>';
+      drugSel.innerHTML = '<option value="">-- Select Category First --</option>';
       clearResults();
       return;
     }
