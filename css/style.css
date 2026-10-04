@@ -304,3 +304,211 @@ body {
   word-break: break-word;
   white-space: pre-wrap;
 }
+/* ============ 结构式检索页 ============ */
+.structure-main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 30px 20px 60px;
+}
+
+.structure-intro {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.structure-intro h2 {
+  color: var(--primary);
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+.structure-intro p {
+  color: var(--text-light);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.structure-card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 32px 36px;
+  box-shadow: 0 4px 20px rgba(31, 78, 121, 0.10);
+  border: 1px solid var(--border);
+  margin-bottom: 30px;
+}
+
+.method-block { margin-bottom: 22px; }
+.method-block.method-disabled { opacity: 0.65; }
+
+.method-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.method-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.method-title {
+  font-weight: 600;
+  color: var(--primary);
+  font-size: 1rem;
+}
+.method-sub {
+  font-size: 0.82rem;
+  color: var(--text-light);
+}
+.badge-coming {
+  background: #FFF3A0;
+  color: #8a6d00;
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-left: auto;
+}
+
+.drop-zone {
+  border: 2px dashed var(--primary-light);
+  border-radius: 10px;
+  padding: 30px 20px;
+  text-align: center;
+  color: var(--primary-light);
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+}
+.drop-zone:hover,
+.drop-zone.drag-over {
+  background: #F0F6FC;
+  border-color: var(--primary);
+}
+.drop-text {
+  color: var(--text);
+  font-size: 0.9rem;
+  margin-top: 8px;
+}
+.drop-text .browse-link {
+  color: var(--primary-light);
+  text-decoration: underline;
+  font-weight: 600;
+}
+.drop-hint {
+  color: var(--text-light);
+  font-size: 0.78rem;
+  margin-top: 4px;
+}
+
+.method-divider {
+  text-align: center;
+  margin: 22px 0;
+  position: relative;
+}
+.method-divider::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; top: 50%;
+  height: 1px;
+  background: var(--border);
+}
+.method-divider span {
+  position: relative;
+  background: var(--card);
+  padding: 0 14px;
+  color: var(--text-light);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.smiles-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color .15s;
+}
+.smiles-input:focus { border-color: var(--primary-light); }
+.input-hint {
+  font-size: 0.78rem;
+  color: var(--text-light);
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+.radio-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+.radio-line input[type="radio"] {
+  margin-top: 3px;
+  accent-color: var(--primary);
+}
+
+.structure-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+.primary-btn {
+  flex: 1;
+  padding: 13px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s;
+}
+.primary-btn:hover { background: #163a5a; }
+.ghost-btn {
+  padding: 13px 26px;
+  background: transparent;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all .15s;
+}
+.ghost-btn:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+.status-msg {
+  margin-top: 16px;
+  font-size: 0.88rem;
+  color: var(--text-light);
+  text-align: center;
+  min-height: 20px;
+}
+.status-msg.success { color: #2E7D32; }
+.status-msg.error   { color: #C62828; }
+
+.structure-results {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+
+@media (max-width: 640px) {
+  .structure-card { padding: 22px 18px; }
+  .structure-intro h2 { font-size: 1.2rem; }
+}
