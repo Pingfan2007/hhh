@@ -12,7 +12,7 @@ async function initRDKit() {
     }
     RDKit = await initRDKitModule({
       locateFile: (file) =>
-        `https://unpkg.com/@rdkit/rdkit@2024.3.5/dist/${file}`
+  `https://cdn.jsdelivr.net/npm/@rdkit/rdkit@2024.3.5/dist/${file}`
     });
     console.log('RDKit 初始化成功，版本：', RDKit.version());
     return true;
