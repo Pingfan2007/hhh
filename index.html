@@ -3,107 +3,98 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Structure Search | Butylphthalide &amp; Cyclosporine Knowledge Base</title>
+  <title>Butylphthalide &amp; Cyclosporine Knowledge Base</title>
   <link rel="stylesheet" href="css/style.css">
-  <script src="https://unpkg.com/@rdkit/rdkit@2024.3.5/dist/RDKit_minimal.js"></script>
 </head>
 <body>
-  <header class="site-header small">
+  <header class="site-header">
     <div class="header-inner">
-      <a class="brand-link" href="index.html">
+      <div class="brand">
+        <span class="brand-mark">石药集团 · 河北医科大学</span>
         <h1>Butylphthalide &amp; Cyclosporine Knowledge Base</h1>
-      </a>
+        <p class="subtitle">A Multi-source Data Foundation for Drug R&amp;D and Industrialization</p>
+      </div>
     </div>
   </header>
 
-  <main class="structure-main">
-
-    <section class="structure-intro">
-      <h2>Structure Search · 结构式检索</h2>
-      <p>Find molecules in the database by providing their chemical structure.<br>
-         您可以通过以下任意一种方式提供结构式，系统会自动匹配数据库中的分子。</p>
+  <main class="home-main">
+    <!-- 搜索栏 -->
+    <section class="search-hero">
+      <h2>Search for Drugs/Products/Diseases/Targets</h2>
+      <div class="search-bar">
+        <input id="globalSearch" type="text" placeholder="Please enter your search here">
+        <button onclick="globalSearchHandler()">Advanced Search</button>
+      </div>
+      <p class="search-hint">Examples: Butylphthalide; Cerebral ischaemic stroke…</p>
+      <p class="search-hint" style="margin-top: 6px;">
+        <a href="structure.html" style="color: var(--primary); font-weight: 600;">
+          → Structure Search · 结构式检索
+        </a>
+      </p>
     </section>
 
-    <section class="structure-card">
-
-      <div class="method-block">
-        <div class="method-head">
-          <span class="method-index">1</span>
-          <span class="method-title">Upload MOL / SDF File</span>
-          <span class="method-sub">上传 MOL / SDF 文件</span>
+    <!-- 统计 + 知识图谱 -->
+    <section class="viz-section">
+      <div class="stat-row">
+        <div class="stat-card">
+          <h3>Statistics</h3>
+          <div class="bar-chart" id="statChartLeft"></div>
         </div>
-        <div class="drop-zone" id="dropZone">
-          <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M12 16V4m0 0L8 8m4-4l4 4" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <p class="drop-text">Drag &amp; drop file here, or <span class="browse-link">browse</span></p>
-          <p class="drop-hint">Supported: .mol, .sdf</p>
-          <input type="file" id="molFile" accept=".mol,.sdf" hidden>
+        <div class="stat-card">
+          <h3>Statistics</h3>
+          <div class="bar-chart" id="statChartRight"></div>
         </div>
       </div>
 
-      <div class="method-divider"><span>OR</span></div>
-
-      <div class="method-block">
-        <div class="method-head">
-          <span class="method-index">2</span>
-          <span class="method-title">Paste SMILES String</span>
-          <span class="method-sub">粘贴 SMILES 字符串</span>
-        </div>
-        <input type="text" id="smilesInput" class="smiles-input"
-               placeholder="e.g. CCCCC1C2=CC=CC=C2C(=O)O1">
-        <p class="input-hint">You can copy SMILES from PubChem, ChEMBL, or any cheminformatics tool.<br>
-          可从 PubChem、ChEMBL 等数据库复制 SMILES。</p>
-      </div>
-
-      <div class="method-block method-disabled">
-        <div class="method-head">
-          <span class="method-index">3</span>
-          <span class="method-title">Draw Structure</span>
-          <span class="method-sub">手绘结构式</span>
-          <span class="badge-coming">Coming soon</span>
-        </div>
-        <p class="input-hint">A built-in structure editor will be available in a future update.<br>
-          内置画板将在后续版本提供。</p>
-      </div>
-
-      <div class="method-block">
-        <div class="method-head">
-          <span class="method-title">Search Options · 检索选项</span>
-        </div>
-        <label class="radio-line">
-          <input type="radio" name="searchMode" value="exact" checked>
-          <span><b>Exact Match</b> — 完整 InChIKey 匹配，找到完全相同的分子</span>
-        </label>
-        <label class="radio-line">
-          <input type="radio" name="searchMode" value="skeleton">
-          <span><b>Skeleton Match</b> — 骨架匹配，找到结构骨架相同的分子</span>
-        </label>
-      </div>
-
-      <div class="structure-actions">
-        <button id="searchBtn" class="primary-btn">Search</button>
-        <button id="clearBtn" class="ghost-btn">Clear</button>
-      </div>
-
-      <div id="statusMsg" class="status-msg"></div>
-    </section>
-
-    <section class="result-panel structure-results">
-      <div class="result-header">
-        <h2 id="resultTitle">Results</h2>
-        <span id="resultCount"></span>
-      </div>
-      <div id="resultList" class="result-list">
-        <p class="empty-tip">Search results will appear here.</p>
+      <div class="graph-placeholder">
+        <div class="graph-center"></div>
+        <div class="graph-node n1"></div>
+        <div class="graph-node n2"></div>
+        <div class="graph-node n3"></div>
+        <div class="graph-node n4"></div>
+        <div class="graph-node n5"></div>
+        <div class="graph-node n6"></div>
       </div>
     </section>
 
+    <!-- 三个入口卡片 -->
+    <section class="entry-cards">
+      <a class="entry-card" href="browse.html">
+        <h3>Data Template</h3>
+        <p>标准化数据模板与字段映射</p>
+      </a>
+      <a class="entry-card" href="browse.html">
+        <h3>Knowledge Graph</h3>
+        <p>基于 NLP 的多源知识图谱</p>
+      </a>
+      <a class="entry-card" href="browse.html">
+        <h3>Modeling Tools</h3>
+        <p>药物研发建模与分析工具</p>
+      </a>
+    </section>
+
+    <div class="footer-links">
+      <a href="browse.html">API/Download</a>
+      <a href="#">Feedback</a>
+    </div>
   </main>
 
   <script src="js/data.js"></script>
   <script src="js/render.js"></script>
-  <script src="js/structure.js"></script>
+  <script>
+    // 首页统计图与搜索
+    document.addEventListener('DOMContentLoaded', () => {
+      renderHomeStats();
+      document.getElementById('globalSearch').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') globalSearchHandler();
+      });
+    });
+
+    function globalSearchHandler() {
+      const kw = document.getElementById('globalSearch').value.trim();
+      if (!kw) return;
+      location.href = `browse.html?q=${encodeURIComponent(kw)}`;
+    }
+  </script>
 </body>
 </html>
